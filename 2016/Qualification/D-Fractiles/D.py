@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-GOLD = "G"
-LEAD = "L"
 
 def has_gold(K,C,S):
 	"""

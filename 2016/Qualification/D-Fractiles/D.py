@@ -3,20 +3,36 @@
 GOLD = "G"
 LEAD = "L"
 
-def has_gold(K,C,S,i,q):
-	print "Has gold? {},{},{}".format(K,C,S)
-	query_range_first = int(K**(C-1))
-	i += query_range_first*(q-1)
-	if C<1 or q>S:
-		return "IMPOSSIBLE"
-	if q==K:
-		print "YES!"
-		return i+1
-	return has_gold(K,C-1,S,i,q+1)
+def has_gold(K,C,S):
+	"""
+	Returns true if we can answer if any of the originals K elements is gold
+	given the C complexity, and the S graduate students
+	"""
+	return S*C >= K
+
+def what_elements_to_query(K,C,S):
+	element_to_query = 0
+	queries = list()
+	for s in range(1,S+1):
+		element = 0
+		for c in reversed(range(1,C+1)):
+			sub_array_len = K**(c-1)
+			element += (sub_array_len * element_to_query)
+			element_to_query += 1
+			if element_to_query >= K:
+				queries.append(str(element + 1))
+				return " ".join(queries)
+		queries.append(str(element + 1))
+	return " ".join(queries)
+			
 
 T = input()
 for testcase in range(1,T+1):
 	K,C,S = map(int, raw_input().split())
-	print "\nINPUT: {},{},{}".format(K,C,S)
-	result = has_gold(K,C,S,0,1)
+	#print "\nINPUT: {},{},{}".format(K,C,S)
+	if not has_gold(K,C,S):
+		result = "IMPOSSIBLE"
+	else:
+		result = what_elements_to_query(K,C,S)
+		
 	print "Case #{}: {}".format(testcase,result)
